@@ -24,18 +24,24 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-white shadow-lg hidden md:block">
-      <div className="p-6 text-xl font-bold">🎓 LMS</div>
+    <aside className="w-64 bg-black text-zinc-300 hidden md:flex flex-col border-r border-zinc-800">
+      <div className="p-6 text-xl font-bold text-yellow-400">
+        🎓 LMS
+      </div>
 
-      <nav className="px-4 space-y-2">
+      <nav className="px-4 space-y-1 flex-1">
         {menu.map((item) => {
           const active = pathname === item.href;
           return (
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 p-3 rounded-lg transition
-                ${active ? "bg-blue-600 text-white" : "hover:bg-gray-100"}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition
+                ${
+                  active
+                    ? "bg-yellow-400 text-black font-semibold"
+                    : "hover:bg-zinc-800 hover:text-yellow-400"
+                }
               `}
             >
               <item.icon size={18} />
@@ -43,12 +49,14 @@ export default function Sidebar() {
             </Link>
           );
         })}
+      </nav>
 
-        <button className="flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 rounded-lg w-full">
+      <div className="p-4">
+        <button className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-400 hover:bg-zinc-800 transition">
           <LogOut size={18} />
           Logout
         </button>
-      </nav>
+      </div>
     </aside>
   );
 }
