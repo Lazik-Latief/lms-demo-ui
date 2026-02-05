@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/app/components/forms/Button';
+import Button from '../../components/forms/Button';
 
 // Secondary auth button (Google)
 // Styled using global LMS variables
