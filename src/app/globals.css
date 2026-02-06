@@ -158,3 +158,14 @@ select:focus {
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
 }
+
+/* Auth glass card enhancement */
+.glass-panel {
+  background: radial-gradient(
+    circle at top left,
+    rgba(255, 215, 0, 0.06),
+    rgba(0, 0, 0, 0.85) 65%
+  );
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}

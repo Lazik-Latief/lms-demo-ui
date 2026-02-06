@@ -3,140 +3,129 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-/**
- * AuthSideCard
- * -----------------------------
- * Visual side card for Login / Signup
- * Center image with glowing ring
- * Symbols orbiting around the image
- *
- * Uses:
- * - framer-motion for animation
- * - Tailwind + existing global.css variables
- */
+/* ================================
+   CONFIG — TUNE THESE
+================================ */
 
-// const symbols = [
-//   { src: '/AuthComponents/symbols/atom-blue.png', size: 36 },
-//   { src: '/AuthComponents/symbols/brain-blue.png', size: 32 },
-//   { src: '/AuthComponents/symbols/character-typing.png', size: 34 },
-//   { src: '/AuthComponents/symbols/pi-blue.png', size: 30 },
-//    { src: '/AuthComponents/symbols/pi-yellow.png', size: 30 },
-//     { src: '/AuthComponents/symbols/sigma-yellow.png', size: 30 },
-//      { src: '/AuthComponents/symbols/ui-bell.png', size: 30 },
-// ];
+// ⬇️ Bigger container so nothing clips
+const SIZE = 1500;
+
+// ⬇️ PULL ORBIT CLOSER TO CENTER IMAGE
+const RADIUS = 280;
+
+const CENTER_IMAGE = 220;
 
 const symbols = [
-  { src: '/AuthComponents/symbols/atom-blue.png', size: 48 },
-  { src: '/AuthComponents/symbols/brain-blue.png', size: 44 },
-  { src: '/AuthComponents/symbols/character-typing.png', size: 46 },
-  { src: '/AuthComponents/symbols/pi-yellow.png', size: 42 },
-  { src: '/AuthComponents/symbols/sigma-yellow.png', size: 42 },
-  { src: '/AuthComponents/symbols/ui-bell.png', size: 40 },
+  { src: '/AuthComponents/symbols/atom-blue.png', size: 68 },
+  { src: '/AuthComponents/symbols/brain-blue.png', size: 68 },
+  { src: '/AuthComponents/symbols/pi-yellow.png', size: 68 },
+  { src: '/AuthComponents/symbols/sigma-yellow.png', size: 68 },
+  { src: '/AuthComponents/symbols/ui-bell.png', size: 68 },
 ];
 
-
+/* ================================
+   MAIN COMPONENT
+================================ */
 export default function AuthSideCard() {
   return (
-    <div className="relative hidden h-full w-full items-center justify-center lg:flex">
-      
-      {/* ===== Card Container ===== */}
-      <div className="card relative flex h-full w-full flex-col items-center justify-center overflow-hidden p-10">
-        
-        {/* ===== Heading Text ===== */}
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-semibold">Koshur Scientist</h1>
-          <p className="mt-2 text-sm text-muted">
-            Where curiosity meets clarity
-          </p>
-        </div>
+    <div className="relative hidden lg:flex w-full h-full items-center justify-center overflow-hidden">
 
-        {/* ===== Image + Orbit System ===== */}
-        <div className="relative flex h-[260px] w-[260px] items-center justify-center">
+      {/* =====================
+         GOLD / BLACK BACKGROUND
+      ====================== */}
+      <div className="absolute inset-0">
+        {/* Radial gold glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.22),rgba(0,0,0,0.9)_65%)]" />
+
+        {/* Vignette for premium depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+      </div>
+
+      {/* =====================
+         ORBIT SCENE
+      ====================== */}
+      <motion.div
+        className="relative z-10"
+        style={{ width: SIZE, height: SIZE }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 36, repeat: Infinity, ease: 'linear' }}
+      >
+        {/* =====================
+           SYMBOLS (STATIC CIRCLE)
+           👉 Edit RADIUS above
+        ====================== */}
+        {symbols.map((icon, i) => {
+          const angle = (2 * Math.PI * i) / symbols.length;
+          const x = Math.cos(angle) * RADIUS;
+          const y = Math.sin(angle) * RADIUS;
+
+          return (
+            <div
+              key={i}
+              className="absolute left-1/2 top-1/2"
+              style={{
+                transform: `translate(${x}px, ${y}px)`,
+              }}
+            >
+              <Image
+                src={icon.src}
+                width={icon.size}
+                height={icon.size}
+                alt="symbol"
+                draggable={false}
+                style={{
+                  filter:
+                    'drop-shadow(0 0 22px rgba(250,204,21,0.9))',
+                }}
+              />
+            </div>
+          );
+        })}
+
+        {/* =====================
+           CENTER IMAGE
+        ====================== */}
+        <div className="absolute inset-0 flex items-center justify-center">
           
-          {/* --- Glowing circular ring --- */}
+          {/* Glowing ring */}
           <motion.div
-            className="absolute inset-0 rounded-full border-2 border-[var(--accent)]"
+            className="absolute rounded-full"
+            style={{
+              width: CENTER_IMAGE + 50,
+              height: CENTER_IMAGE + 50,
+            }}
             animate={{
               boxShadow: [
-                '0 0 20px rgba(255,210,51,0.25)',
-                '0 0 40px rgba(255,210,51,0.45)',
-                '0 0 20px rgba(255,210,51,0.25)',
+                '0 0 40px rgba(250,204,21,0.5)',
+                '0 0 100px rgba(250,204,21,0.95)',
+                '0 0 40px rgba(250,204,21,0.5)',
               ],
             }}
             transition={{
-              duration: 3,
+              duration: 4,
               repeat: Infinity,
               ease: 'easeInOut',
             }}
           />
 
-          {/* --- Center Image --- */}
-          <div className="relative z-10 h-[150px] w-[150px] overflow-hidden rounded-full border border-[var(--border-subtle)] bg-[var(--surface)]">
+          {/* Actual image */}
+          <div
+            className="relative rounded-full overflow-hidden ring-2 ring-yellow-400/70"
+            style={{
+              width: CENTER_IMAGE,
+              height: CENTER_IMAGE,
+            }}
+          >
             <Image
-              src="/AuthComponents/symbols/new-profile.jpeg"
-              alt="Koshur Scientist Visual"
+              src="/AuthComponents/symbols/character-typing.png"
+              alt="center"
               fill
               className="object-cover"
               priority
             />
           </div>
-
-          {/* --- Orbiting Symbols Layer --- */}
-          <motion.div
-            className="absolute inset-0"
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 22,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-          >
-            {symbols.map((icon, index) => {
-              const angle = (360 / symbols.length) * index;
-
-              return (
-                <motion.div
-                  key={index}
-                  className="absolute left-1/2 top-1/2"
-                  style={{
-                    transform: `
-                      rotate(${angle}deg)
-                      translateY(-130px)
-                      rotate(-${angle}deg)
-                    `,
-                  }}
-                  animate={{
-                    opacity: [0.7, 1, 0.7],
-                    filter: [
-                      'drop-shadow(0 0 6px rgba(255,210,51,0.3))',
-                      'drop-shadow(0 0 12px rgba(255,210,51,0.6))',
-                      'drop-shadow(0 0 6px rgba(255,210,51,0.3))',
-                    ],
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    delay: index * 0.3,
-                  }}
-                >
-                  <Image
-                    src={icon.src}
-                    alt="symbol"
-                    width={icon.size}
-                    height={icon.size}
-                  />
-                </motion.div>
-              );
-            })}
-          </motion.div>
         </div>
-
-        {/* ===== Footer Text ===== */}
-        <p className="mt-10 max-w-xs text-center text-sm text-muted">
-          Learn. Experiment. Innovate.  
-          Built for thinkers, makers, and future scientists.
-        </p>
-      </div>
+      </motion.div>
     </div>
   );
 }
