@@ -2,14 +2,11 @@
 
 import Button from './Button-New';
 
-
-// Google authentication button
-// Used in login and signup pages
-
-export default function GoogleAuthButton({
-  onClick,
-  disabled = false,
-}) {
+/**
+ * Google Authentication Button
+ * Use in Login & Signup pages
+ */
+export default function GoogleAuthButton({ onClick, disabled = false }) {
   return (
     <Button
       variant="secondary"
@@ -27,32 +24,23 @@ export default function GoogleAuthButton({
         font-medium
         transition-all
         duration-200
-        hover:shadow-[0_0_0_2px_rgba(255,210,51,0.25)]
+        border border-gray-500
+        rounded-md
+        bg-white
+        text-black
+        color-black 
+        hover:bg-yellow-400
         focus:outline-none
         disabled:opacity-60
         disabled:cursor-not-allowed
       "
     >
-      {/* Google icon placeholder */}
-      <span
-        className="
-          flex
-          h-5
-          w-5
-          items-center
-          justify-center
-          rounded-full
-          bg-[var(--surface)]
-          text-[var(--text-primary)]
-          text-xs
-        "
-      >
-        G
+      {/* GOOGLE ICON */}
+      <span className="flex h-5 w-5 items-center justify-center">
+        <img src="/google.svg" alt="Google" className="w-full h-full object-contain"/>
       </span>
 
-      <span className="text-[var(--text-secondary)]">
-        Continue with Google
-      </span>
+      <span>Continue with Google</span>
     </Button>
   );
 }

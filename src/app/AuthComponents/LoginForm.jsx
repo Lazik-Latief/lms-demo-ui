@@ -11,22 +11,22 @@ import Button from '../AuthComponents/Button-New';
 export default function LoginForm() {
   return (
     <FormWrapper
-      title="Welcome back"
-      subtitle="Sign in to continue to Koshur LMS"
-      className="w-full max-w-md"
+      title="Koshur Scientist "
+      subtitle="Welcome back! Please enter your details to sign in."
+      className="w-full   max-w-7xl  "
     >
-      {/* FORM CARD BACKGROUND & SPACING */}
-      <div className="relative w-full h-full flex items-center justify-center 
-                bg-gradient-to-tr from-black/80 via-yellow-900/30 to-yellow-800/20 
-                rounded-3xl overflow-hidden">
-        {/* <-- EDIT THIS DIV TO CHANGE FORM CARD BACKGROUND GRADIENT --> */}
-
-        {/* FORM FIELDS CONTAINER */}
-        <div className="flex flex-col gap-5">
-          {/* INPUT FIELD */}
+      {/* FORM INNER CONTAINER */}
+      {/* bg-gradient => edit form card background or gradient */}
+      <div className="relative w-full h-full flex  items-center justify-center
+                      bg-linear-to-tr from-black/90 via-yellow-900/10 to-yellow-800/20
+                      rounded-2xl p-8 shadow-lg           /* ⬅ width control */
+         /* ⬅ height control */">
+        
+        <div className="flex flex-col gap-5 w-full">
+          {/* EMAIL / PHONE INPUT */}
           <TextField label="Email or Phone" placeholder="you@example.com" />
 
-          {/* PASSWORD FIELD */}
+          {/* PASSWORD INPUT */}
           <PasswordInput />
 
           {/* REMEMBER ME + FORGOT PASSWORD */}
@@ -38,12 +38,14 @@ export default function LoginForm() {
           </div>
 
           {/* SIGN IN BUTTON */}
-          <Button className="w-full">Sign In</Button>
+          <Button className="w-full py-2.5 text-sm font-medium">
+            Sign In
+          </Button>
 
           {/* DIVIDER LINE */}
           <Divider />
 
-          {/* GOOGLE SIGN-IN */}
+          {/* GOOGLE SIGN-IN BUTTON */}
           <GoogleAuthButton />
         </div>
       </div>
