@@ -5,40 +5,27 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 /* ======================================================
-   CONFIGURATION ZONE — EDIT FREELY
+   CONFIGURATION ZONE — EDIT THESE TO ADJUST ORBIT
 ====================================================== */
-
-// Overall container size (MUST be > orbit radius * 2)
-const SIZE = 1200;
-
-// Elliptical orbit radii
-const RADIUS_X = 420; // horizontal stretch
-const RADIUS_Y = 280; // vertical stretch
-
-// Base angular speed (radians per ms)
-const BASE_SPEED = 0.002;
-
-// Hover slowdown multiplier
-const HOVER_DAMPING = 0.2;
-
-// Parallax tilt strength
-const TILT_STRENGTH = 12;
+const SIZE = 1200;          // Container size (should be bigger than orbit)
+const RADIUS_X = 420;       // Horizontal orbit radius
+const RADIUS_Y = 280;       // Vertical orbit radius
+const BASE_SPEED = 0.002;   // Base rotation speed
+const HOVER_DAMPING = 0.2;  // Slowdown on hover
+const TILT_STRENGTH = 12;   // Parallax tilt strength
 
 /* ======================================================
    SINGLE ORBITING SYMBOL
 ====================================================== */
 function OrbitSymbol({ icon, index, total, angle }) {
-  /* Each symbol has an offset so they distribute evenly */
-  const a = useTransform(
-    angle,
-    (v) => v + (index * Math.PI * 2) / total
-  );
+  // Each symbol has an offset so they distribute evenly
+  const a = useTransform(angle, (v) => v + (index * Math.PI * 2) / total);
 
-  /* Elliptical position math */
+  // Compute x, y position based on ellipse
   const x = useTransform(a, (v) => Math.cos(v) * RADIUS_X);
   const y = useTransform(a, (v) => Math.sin(v) * RADIUS_Y);
 
-  /* Fake depth using sine curve */
+  // Depth simulation for scale, opacity, zIndex
   const depth = useTransform(a, (v) => (Math.sin(v) + 1) / 2);
 
   return (
@@ -47,32 +34,19 @@ function OrbitSymbol({ icon, index, total, angle }) {
       style={{
         x,
         y,
-
-        /* Scale increases when symbol comes forward */
         scale: depth.to((d) => 0.65 + d * 0.75),
-
-        /* Fade distant symbols */
         opacity: depth.to((d) => 0.35 + d * 0.65),
-
-        /* Depth blur + glow (SAFE string — your bug was here) */
         filter: depth.to(
           (d) =>
-            `blur(${(1 - d) * 2}px)
-             drop-shadow(0 0 ${12 + d * 24}px rgba(250,204,21,0.9))`
+            `blur(${(1 - d) * 2}px) drop-shadow(0 0 ${12 + d * 24}px rgba(250,204,21,0.9))`
         ),
-
-        /* True depth sorting */
         zIndex: depth.to((d) => Math.round(d * 40)),
       }}
     >
-      {/* Self-rotation for life */}
+      {/* SELF ROTATION OF SYMBOL */}
       <motion.div
         animate={{ rotate: 360 }}
-        transition={{
-          duration: 14,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
       >
         <Image
           src={icon.src}
@@ -92,16 +66,13 @@ function OrbitSymbol({ icon, index, total, angle }) {
 export default function OrbitScene({ symbols, center }) {
   const angle = useMotionValue(0);
   const speed = useRef(BASE_SPEED);
-
   const [isHover, setIsHover] = useState(false);
 
-  /* Mouse parallax values */
+  // Mouse parallax
   const tiltX = useMotionValue(0);
   const tiltY = useMotionValue(0);
 
-  /* ===============================
-     ANIMATION LOOP (REAL PHYSICS)
-  =============================== */
+  // Animation loop for orbit
   useEffect(() => {
     let raf;
     let last = performance.now();
@@ -109,7 +80,6 @@ export default function OrbitScene({ symbols, center }) {
     const loop = (now) => {
       const delta = now - last;
       last = now;
-
       angle.set(angle.get() + delta * speed.current);
       raf = requestAnimationFrame(loop);
     };
@@ -118,18 +88,12 @@ export default function OrbitScene({ symbols, center }) {
     return () => cancelAnimationFrame(raf);
   }, [angle]);
 
-  /* ===============================
-     HOVER SLOWDOWN LOGIC
-  =============================== */
+  // Slow down orbit on hover
   useEffect(() => {
-    speed.current = isHover
-      ? BASE_SPEED * HOVER_DAMPING
-      : BASE_SPEED;
+    speed.current = isHover ? BASE_SPEED * HOVER_DAMPING : BASE_SPEED;
   }, [isHover]);
 
-  /* ===============================
-     MOUSE PARALLAX
-  =============================== */
+  // Mouse parallax calculation
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const dx = e.clientX - (rect.left + rect.width / 2);
@@ -139,18 +103,13 @@ export default function OrbitScene({ symbols, center }) {
     tiltY.set((dx / rect.width) * TILT_STRENGTH);
   };
 
-  /* ===============================
-     MOBILE FALLBACK
-  =============================== */
+  // MOBILE FALLBACK: no orbit
   if (typeof window !== 'undefined' && window.innerWidth < 768) {
-    return (
-      <div className="flex items-center justify-center">
-        {center}
-      </div>
-    );
+    return <div className="flex items-center justify-center">{center}</div>;
   }
 
   return (
+    // ORBIT SCENE CONTAINER
     <motion.div
       className="relative mx-auto"
       style={{
@@ -166,13 +125,7 @@ export default function OrbitScene({ symbols, center }) {
     >
       {/* ORBITING SYMBOLS */}
       {symbols.map((icon, i) => (
-        <OrbitSymbol
-          key={i}
-          icon={icon}
-          index={i}
-          total={symbols.length}
-          angle={angle}
-        />
+        <OrbitSymbol key={i} icon={icon} index={i} total={symbols.length} angle={angle} />
       ))}
 
       {/* CENTER CONTENT */}
@@ -182,6 +135,7 @@ export default function OrbitScene({ symbols, center }) {
 
       {/* GRAIN / NOISE OVERLAY */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay bg-[url('/noise.png')]" />
+      {/* <-- EDIT opacity or bg to change overlay intensity/color --> */}
     </motion.div>
   );
 }

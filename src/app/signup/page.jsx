@@ -1,66 +1,27 @@
 'use client';
 
-import FormWrapper from '../AuthComponents/FormWrapper';
-import TextField from '../AuthComponents/InputField';
-import PasswordInput from '../AuthComponents/PasswordInput';
-import Checkbox from '../AuthComponents/Checkbox';
-import Divider from '../AuthComponents/Divider';
-import GoogleAuthButton from '../AuthComponents/Googlebtn';
-import Button from '../AuthComponents/Button-New';
+import LoginForm from '../AuthComponents/LoginForm';
 import AuthSideCard from '../AuthComponents/AuthSideCard';
 
 export default function LoginPage() {
   return (
-    /* =====================================================
-       PAGE ROOT
-       - h-screen → NO SCROLL
-       - overflow-hidden → symbols never cause scroll
-       - dark base background
-    ===================================================== */
-    <div className="h-screen w-full overflow-hidden bg-black flex items-center justify-center px-4">
+    // MAIN CONTAINER: full screen, centers content horizontally and vertically
+    <div className="h-screen w-full flex items-center justify-center bg-[var(--background)] px-4">
       
-      {/* =====================================================
-         MAIN AUTH CONTAINER (JOINED CARD)
-         - rounded + glass look
-         - same height for both sides
-      ===================================================== */}
-      <div className="relative w-full max-w-6xl h-[640px] grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden glass-panel">
-
-        {/* ================= LEFT: LOGIN FORM ================= */}
-        <div className="flex items-center justify-center px-8">
-          <FormWrapper
-            title="Welcome back"
-            subtitle="Sign in to continue to Koshur LMS"
-          >
-            <div className="flex flex-col gap-4">
-              <TextField
-                label="Email or Phone"
-                placeholder="you@example.com"
-              />
-
-              <PasswordInput />
-
-              <div className="flex items-center justify-between">
-                <Checkbox label="Remember me" />
-                <span className="text-sm text-[var(--text-muted)] cursor-pointer hover:text-[var(--text-secondary)]">
-                  Forgot password?
-                </span>
-              </div>
-
-              <Button className="w-full">
-                Sign In
-              </Button>
-
-              <Divider />
-
-              <GoogleAuthButton />
-            </div>
-          </FormWrapper>
+      {/* GRID WRAPPER: contains LEFT login form and RIGHT branding card */}
+      <div className="relative w-full max-w-6xl h-[680px] grid grid-cols-1 lg:grid-cols-2 gap-8 rounded-3xl overflow-hidden shadow-xl">
+        
+        {/* LEFT COLUMN: Login Form */}
+        <div className="flex items-center justify-center px-6 lg:px-12 py-8 bg-[var(--card-background)] rounded-3xl">
+          {/* <--- EDIT bg-[var(--card-background)] TO CHANGE FORM CARD COLOR */}
+          <LoginForm />
         </div>
 
-        {/* ================= RIGHT: BRANDING / ORBIT ================= */}
-        <AuthSideCard />
-
+        {/* RIGHT COLUMN: Branding + Floating Icons */}
+        <div className="hidden lg:flex items-center justify-center">
+          {/* <--- EDIT AuthSideCard.jsx for background gradient and icons */}
+          <AuthSideCard />
+        </div>
       </div>
     </div>
   );
