@@ -13,27 +13,7 @@ export default function GoogleAuthButton({ onClick, disabled = false }) {
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className="
-        w-full
-        flex
-        items-center
-        justify-center
-        gap-3
-        py-2.5
-        text-sm
-        font-medium
-        transition-all
-        duration-200
-        border border-gray-500
-        rounded-md
-        bg-white
-        text-black
-        color-black 
-        hover:bg-yellow-400
-        focus:outline-none
-        disabled:opacity-60
-        disabled:cursor-not-allowed
-      "
+      className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-xl px-5 py-3 text-[13px] font-bold transition-all active:scale-95"
     >
       {/* GOOGLE ICON */}
       <span className="flex h-5 w-5 items-center justify-center">
